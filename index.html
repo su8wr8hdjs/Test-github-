@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quest Harian</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #2b5876, #4e4376);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: rgba(0,0,0,0.6);
+      padding: 20px;
+      border-radius: 15px;
+      width: 350px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: rgba(255,255,255,0.1);
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.3s;
+    }
+    li.completed {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+    button {
+      background: #6a5acd;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #483d8b;
+    }
+    .add-quest {
+      display: flex;
+      margin-top: 15px;
+    }
+    .add-quest input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px 0 0 8px;
+      border: none;
+      outline: none;
+    }
+    .add-quest button {
+      border-radius: 0 8px 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎯 Quest Harian</h1>
+    <ul id="quest-list">
+      <li><span>Belajar 30 menit</span><button onclick="selesai(this)">Selesai</button></li>
+      <li><span>Olahraga 15 menit</span><button onclick="selesai(this)">Selesai</button></li>
+      <li><span>Baca 5 halaman buku</span><button onclick="selesai(this)">Selesai</button></li>
+    </ul>
+    <div class="add-quest">
+      <input type="text" id="newQuest" placeholder="Tambah quest...">
+      <button onclick="tambahQuest()">Tambah</button>
+    </div>
+  </div>  <script>
+    function selesai(btn) {
+      const li = btn.parentElement;
+      li.classList.toggle("completed");
+    }
+
+    function tambahQuest() {
+      const input = document.getElementById("newQuest");
+      const questText = input.value.trim();
+      if(questText === "") return;
+      const ul = document.getElementById("quest-list");
+      const li = document.createElement("li");
+      li.innerHTML = `<span>${questText}</span><button onclick="selesai(this)">Selesai</button>`;
+      ul.appendChild(li);
+      input.value = "";
+    }
+  </script></body>
+</html>
