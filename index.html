@@ -129,7 +129,7 @@
       if (lastDate !== today) {
         // Reset ke default quest kalau hari sudah ganti
         document.getElementById("quest-list").innerHTML = "";
-        defaultQuests.forEach(q => addQuestToList(q));
+        defaultQuests.forEach(q => addQuestToList(q, false));
         saveQuests();
       } else {
         const quests = JSON.parse(localStorage.getItem("quests")) || [];
