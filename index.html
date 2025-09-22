@@ -75,30 +75,69 @@
 <body>
   <div class="container">
     <h1>🎯 Quest Harian</h1>
-    <ul id="quest-list">
-      <li><span>Belajar 30 menit</span><button onclick="selesai(this)">Selesai</button></li>
-      <li><span>Olahraga 15 menit</span><button onclick="selesai(this)">Selesai</button></li>
-      <li><span>Baca 5 halaman buku</span><button onclick="selesai(this)">Selesai</button></li>
-    </ul>
+    <ul id="quest-list"></ul>
     <div class="add-quest">
       <input type="text" id="newQuest" placeholder="Tambah quest...">
       <button onclick="tambahQuest()">Tambah</button>
     </div>
   </div>  <script>
+    const defaultQuests = [
+      "Belajar 30 menit",
+      "Olahraga 15 menit",
+      "Baca 5 halaman buku"
+    ];
+
     function selesai(btn) {
       const li = btn.parentElement;
       li.classList.toggle("completed");
+      saveQuests();
     }
 
     function tambahQuest() {
       const input = document.getElementById("newQuest");
       const questText = input.value.trim();
       if(questText === "") return;
-      const ul = document.getElementById("quest-list");
-      const li = document.createElement("li");
-      li.innerHTML = `<span>${questText}</span><button onclick="selesai(this)">Selesai</button>`;
-      ul.appendChild(li);
+      addQuestToList(questText);
+      saveQuests();
       input.value = "";
     }
+
+    function addQuestToList(text, completed = false) {
+      const ul = document.getElementById("quest-list");
+      const li = document.createElement("li");
+      li.innerHTML = `<span>${text}</span><button onclick="selesai(this)">Selesai</button>`;
+      if (completed) li.classList.add("completed");
+      ul.appendChild(li);
+    }
+
+    function saveQuests() {
+      const quests = [];
+      document.querySelectorAll("#quest-list li").forEach(li => {
+        quests.push({
+          text: li.querySelector("span").innerText,
+          completed: li.classList.contains("completed")
+        });
+      });
+      localStorage.setItem("quests", JSON.stringify(quests));
+      localStorage.setItem("lastDate", new Date().toDateString());
+    }
+
+    function loadQuests() {
+      const today = new Date().toDateString();
+      const lastDate = localStorage.getItem("lastDate");
+
+      if (lastDate !== today) {
+        // Reset ke default quest kalau hari sudah ganti
+        document.getElementById("quest-list").innerHTML = "";
+        defaultQuests.forEach(q => addQuestToList(q));
+        saveQuests();
+      } else {
+        const quests = JSON.parse(localStorage.getItem("quests")) || [];
+        document.getElementById("quest-list").innerHTML = "";
+        quests.forEach(q => addQuestToList(q.text, q.completed));
+      }
+    }
+
+    window.onload = loadQuests;
   </script></body>
 </html>
